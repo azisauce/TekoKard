@@ -1,0 +1,23 @@
+/* Import variables */
+@import './_variables.css';
+
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+h1 {
+    margin-bottom: var(--spacing-md);
+}
+
+ul {
+    list-style: none;
+    padding: var(--spacing-md);
+}

@@ -1,0 +1,14 @@
+:root {
+    /* Colors */
+    --primary-color: #4CAF50;
+    --primary-hover: #45a049;
+    --error-color: #ff4444;
+    --error-bg: #ffe6e6;
+    
+    /* Spacing */
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    
+    /* Border */
+    --border-radius: 4px;
+}
