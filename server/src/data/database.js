@@ -1,5 +1,5 @@
 const knex = require('knex');
-const knexConfig = require('../knexfile'); // Import the knexfile configurations
+const knexConfig = require('../../knexfile'); // Import the knexfile configurations
 
 // Determine the current environment (default to 'development')
 const environment = process.env.NODE_ENV || 'development';

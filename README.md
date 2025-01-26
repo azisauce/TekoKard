@@ -116,3 +116,44 @@ tekokard/
    - Develop components in `/client/src/components`
    - Set up views in `/client/src/views`
    - Configure store in `/client/src/store`
+
+
+## Database Design 
+
+### Overview
+This database schema supports a social media web application with user management, posts, comments, reactions, and tagging features.
+
+### Entity Descriptions
+
+#### Users
+- Unique identifier and authentication
+- Profile management
+- Role-based access control
+
+#### Posts
+- User-generated content
+- Supports anonymous and public posts
+- Multiple status states (draft, published, archived)
+
+#### Comments
+- Attached to specific posts
+- Supports anonymous and public comments
+
+#### Reactions
+- Users can react to posts
+- Multiple reaction types supported
+
+#### Roles
+- Defines user permissions
+- Flexible permission management via JSON
+
+### Recommended Implementations
+- Use database-level constraints
+- Create indexes on frequent query fields
+- Implement soft delete mechanisms
+- Use transactions for data integrity
+
+### Performance Optimization
+- Index foreign key columns
+- Use appropriate data types
+- Consider database partitioning for large datasets

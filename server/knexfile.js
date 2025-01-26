@@ -10,10 +10,10 @@ module.exports = {
             database: process.env.PG_DATABASE,
         },
         migrations: {
-            directory: "./data/migrations",
+            directory: "./src/data/migrations",
         },
         seeds: {
-            directory: "./data/seeds",
+            directory: "./src/data/seeds",
         },
     },
 };
