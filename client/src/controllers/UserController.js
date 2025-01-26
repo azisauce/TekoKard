@@ -8,9 +8,9 @@ export default class UserController {
     async loadUsers() {
         try {
             const users = await UserService.fetchUsers();
-            this.store.commit('setUsers', users);
+            this.store.commit('user/setUsers', users);
         } catch (error) {
-            this.store.commit('setError', error.message);
+            this.store.commit('user/setError', error.message);
         }
     }
 }

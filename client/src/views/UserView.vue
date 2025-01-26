@@ -21,8 +21,8 @@ export default {
         const store = useStore();
         const userController = new UserController(store);
 
-        const users = computed(() => store.state.users);
-        const error = computed(() => store.state.error);
+        const users = computed(() => store.state.user.users);
+        const error = computed(() => store.state.user.error);
 
         onMounted(() => {
             userController.loadUsers();
