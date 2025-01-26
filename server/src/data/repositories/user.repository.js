@@ -1,8 +1,59 @@
-const userRepository = require('./data/repositories/user.repository');
+const User = require('../models/user.model');
 
-const fetchUsers = async () => {
-  const users = await userRepository.getAllUsers();
-  console.log(users);
-};
+class UserRepository {
+    async create(userData) {
+        try {
+            // Model will handle validation
+            return await User.create(userData);
+        } catch (error) {
+            throw new Error('Error creating user: ' + error.message);
+        }
+    }
 
-fetchUsers();
+    async findAll() {
+        try {
+            return await User.findAll();
+        } catch (error) {
+            throw new Error('Error fetching users: ' + error.message);
+        }
+    }
+
+    async findById(id) {
+        try {
+            const user = await User.findById(id);
+            if (!user) {
+                throw new Error('User not found');
+            }
+            return user;
+        } catch (error) {
+            throw new Error('Error fetching user: ' + error.message);
+        }
+    }
+
+    async update(id, userData) {
+        try {
+            // Model will handle validation
+            const updatedUser = await User.update(id, userData);
+            if (!updatedUser || updatedUser.length === 0) {
+                throw new Error('User not found');
+            }
+            return updatedUser[0];
+        } catch (error) {
+            throw new Error('Error updating user: ' + error.message);
+        }
+    }
+
+    async delete(id) {
+        try {
+            const result = await User.delete(id);
+            if (result === 0) {
+                throw new Error('User not found');
+            }
+            return true;
+        } catch (error) {
+            throw new Error('Error deleting user: ' + error.message);
+        }
+    }
+}
+
+module.exports = new UserRepository();

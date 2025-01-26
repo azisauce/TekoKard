@@ -1,27 +1,24 @@
-const db = require('../../data/database');
+const userService = require('../../business/services/user.service');
 
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await db('users').select('*');
+        const users = await userService.getAllUsers();
         res.json(users);
     } catch (error) {
-        console.error('Error fetching users:', error);
-        res.status(500).json({ error: 'Failed to fetch users' });
+        console.error(error.message);
+        res.status(500).json({ error: error.message });
     }
 };
 
 exports.getUserById = async (req, res) => {
     try {
-        const user = await db('users')
-            .where({ id: parseInt(req.params.id) })
-            .first();
-            
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
+        const user = await userService.getUserById(req.params.id);
         res.json(user);
     } catch (error) {
-        console.error('Error fetching user:', error);
-        res.status(500).json({ error: 'Failed to fetch user' });
+        console.error(error.message);
+        if (error.message.includes('not found')) {
+            return res.status(404).json({ error: error.message });
+        }
+        res.status(500).json({ error: error.message });
     }
 };
