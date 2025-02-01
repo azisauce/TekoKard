@@ -41,3 +41,35 @@ exports.register = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+exports.refresh = async (req, res) => {
+    try {
+        const { refreshToken } = req.body;
+        
+        if (!refreshToken) {
+            return res.status(400).json({ error: 'Refresh token is required' });
+        }
+
+        const result = await authService.refresh(refreshToken);
+        res.json(result);
+    } catch (error) {
+        console.error('Refresh token error:', error.message);
+        res.status(401).json({ error: 'Invalid refresh token' });
+    }
+};
+
+exports.logout = async (req, res) => {
+    try {
+        const { refreshToken } = req.body;
+        
+        if (!refreshToken) {
+            return res.status(400).json({ error: 'Refresh token is required' });
+        }
+
+        await authService.logout(refreshToken);
+        res.json({ message: 'Logged out successfully' });
+    } catch (error) {
+        console.error('Logout error:', error.message);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

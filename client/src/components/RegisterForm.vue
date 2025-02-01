@@ -99,7 +99,7 @@ export default {
 
         console.log('Registration successful')
         
-        router.push('/login')
+        router.push('/profile')
       } catch (err) {
         error.value = err.message || 'Registration failed'
       } finally {

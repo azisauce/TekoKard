@@ -49,38 +49,43 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { ref } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+import { computed } from 'vue'
 
 export default {
   name: 'LoginView',
-  data() {
-    return {
-      form: {
-        email: '',
-        password: ''
-      }
-    };
-  },
-  computed: {
-    ...mapGetters('auth', ['isLoading', 'getError']),
-    error() {
-      return this.getError;
-    }
-  },
-  methods: {
-    ...mapActions('auth', ['login']),
-    async handleLogin() {
+  setup() {
+    const store = useStore()
+    const router = useRouter()
+    
+    const form = ref({
+      email: '',
+      password: ''
+    })
+    
+    const isLoading = computed(() => store.getters['auth/isLoading'])
+    const error = computed(() => store.getters['auth/getError'])
+
+    const handleLogin = async () => {
       try {
-        await this.login(this.form);
-        // this.$router.push('/dashboard');
-        console.log('Login successful');
+        await store.dispatch('auth/login', form.value)
+        console.log('Login successful')
+        router.push('/profile')
       } catch (error) {
-        // Error is already handled by the store
-        console.error('Login failed:', error);
+        console.error('Login failed:', error)
       }
+    }
+
+    return {
+      form,
+      isLoading,
+      error,
+      handleLogin
     }
   }
-};
+}
 </script>
 
 <style scoped>
