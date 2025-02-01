@@ -18,6 +18,12 @@ class User {
             .first();
     }
 
+    static async findByEmail(email) {
+        return db('users')
+            .where({ email })
+            .first();
+    }
+
     static async update(id, userData) {
         this.validateUserData(userData);
         return db('users')

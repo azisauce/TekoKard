@@ -1,16 +1,10 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <UserView />
+  <router-view />
 </template>
 
 <script>
-import UserView from './views/UserView.vue'
-
 export default {
-  name: 'App',
-  components: {
-    UserView
-  }
+  name: 'App'
 }
 </script>
 

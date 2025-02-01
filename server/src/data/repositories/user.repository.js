@@ -3,7 +3,6 @@ const User = require('../models/user.model');
 class UserRepository {
     async create(userData) {
         try {
-            // Model will handle validation
             return await User.create(userData);
         } catch (error) {
             throw new Error('Error creating user: ' + error.message);
@@ -28,6 +27,10 @@ class UserRepository {
         } catch (error) {
             throw new Error('Error fetching user: ' + error.message);
         }
+    }
+
+    async findByEmail(email) {
+        return User.findByEmail(email);
     }
 
     async update(id, userData) {
