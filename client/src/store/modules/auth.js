@@ -115,9 +115,12 @@ export default {
     async logout({ commit }) {
       try {
         await AuthService.logout();
-      } finally {
         commit('logout');
+        // Remove auth header
         delete axios.defaults.headers.common['Authorization'];
+        return Promise.resolve();
+      } catch (error) {
+        return Promise.reject(error);
       }
     }
   },

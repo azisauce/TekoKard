@@ -19,7 +19,7 @@ export default {
 
     const handleLogout = async () => {
       try {
-        await store.dispatch('logout');
+        await store.dispatch('auth/logout');
         router.push('/login');
       } catch (error) {
         console.error('Logout failed:', error);
