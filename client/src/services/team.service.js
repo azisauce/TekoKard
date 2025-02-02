@@ -7,6 +7,17 @@ class TeamService {
         const response = await axios.post(API_URL, teamData);
         return response.data;
     }
+
+    async findTeamByTeamTag(teamTag) {
+        console.log('Attempting to find team with tag:', teamTag);
+        try {
+            const response = await axios.get(API_URL + teamTag.name);
+            return response.data;
+        } catch (error) {
+            console.error('Error in findTeamByTeamTag:', error);
+            throw error;
+        }
+    }
 }
 
 export default new TeamService();

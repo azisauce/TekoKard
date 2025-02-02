@@ -25,6 +25,14 @@ class Team {
             
         return transaction ? query.transacting(transaction) : query;
     }
+
+    static async findTeamByTag(tag, { transaction } = {}) {
+        const query = db('teams')
+            .where(tag)
+            .first();
+            
+        return transaction ? query.transacting(transaction) : query;
+    }
 }
 
 module.exports = Team;

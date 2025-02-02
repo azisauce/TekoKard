@@ -18,3 +18,21 @@ exports.createTeam = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+exports.findTeam = async (req, res) => {
+    try {
+        const { teamTag } = req.params;
+        const team = await teamService.findTeamByTeamTag({tag: teamTag});
+        if (!team) {
+            return res.status(400).json({ error: 'No team found' });
+        } else {
+            res.json(team);
+        }
+    } catch (error) {
+        console.error('Find team error:', error.message);
+        if (error.message.includes('not found')) {
+            return res.status(404).json({ error: error.message });
+        }
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};

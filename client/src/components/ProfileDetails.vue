@@ -11,6 +11,9 @@
         <div v-if="hasTeam === true" class="team-name-section">
             <div>Great! What's the name of your team?</div>
             <input v-model="teamName" type="text" placeholder="Enter team name" />
+            <button @click="handleFindTeam" class="submit-button" :disabled="!teamName">Find Team</button>
+            <div v-if="error" class="error-message">{{ error }}</div>
+            <div v-if="teamSubmitted" class="success-message">OK! We will inform your admins</div>
         </div>
 
         <div v-if="hasTeam === false" class="create-team-section">
@@ -37,6 +40,7 @@ export default {
         const teamName = ref('')
         const error = ref(null)
         const isLoading = ref(false)
+        const teamSubmitted = ref(false)
 
         const createTeam = async (teamData) => {
             try {
@@ -55,12 +59,30 @@ export default {
             }
         }
 
+        const handleFindTeam = async () => {
+            if (teamName.value) {
+                try {
+                    error.value = null;
+                    const result = await store.dispatch('teams/findTeam', { name: teamName.value });
+                    // Reset the form after successful find
+                    teamName.value = '';
+                    hasTeam.value = !!result;
+                    teamSubmitted.value = true;
+                } catch (err) {
+                    error.value = err.response?.data?.error || 'Failed to find team with that tag';
+                    console.error('Failed to find team:', err);
+                }
+            }
+        }
+
         return {
             hasTeam,
             teamName,
             createTeam,
+            handleFindTeam,
             error,
-            isLoading
+            isLoading,
+            teamSubmitted
         }
     }
 }
@@ -114,12 +136,38 @@ input {
 }
 
 .error-message {
-    color: red;
+    color: #dc3545;
     margin-top: 0.5rem;
+    font-size: 0.9rem;
 }
 
 .loading {
     opacity: 0.7;
     pointer-events: none;
+}
+
+.submit-button {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.submit-button:hover:not(:disabled) {
+    background-color: #45a049;
+}
+
+.success-message {
+    color: #2ecc71;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
 }
 </style>

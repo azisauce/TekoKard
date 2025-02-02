@@ -22,6 +22,18 @@ class TeamService {
             throw new Error(errorMessage);
         }
     }
+
+    async findTeamByTeamTag(teamTag) {
+        try {
+            const team = await Team.findTeamByTag(teamTag);
+            console.log('what service return:',team);
+            
+            return team;
+        } catch (error) {
+            console.error('Error finding team:', error);
+            throw new Error('Failed to find team');
+        }
+    }
 }
 
 module.exports = new TeamService();

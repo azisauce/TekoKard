@@ -36,6 +36,8 @@ exports.register = async (req, res) => {
     } catch (error) {
         if (error.message.includes('users_email_unique')) {
             return res.status(400).json({ message: 'This email is already in use' });
+        } else if (error.message.includes('users_username_unique')) {
+            return res.status(400).json({ message: 'This username is already in use' });
         }
         if (error.message === 'Invalid credentials') {
             return res.status(401).json({ error: error.message });

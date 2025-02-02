@@ -59,6 +59,28 @@ export default {
       } finally {
         commit('SET_LOADING', false);
       }
+    },
+
+    async findTeam({ commit}, teamTag) {
+      try {
+        commit('SET_LOADING', true);
+        commit('SET_ERROR', null);
+        console.log('teamTag', teamTag);
+        const response = await teamService.findTeamByTeamTag(teamTag);
+        console.log('Found team:', response);
+        // const newTeam = response;
+        // commit('ADD_TEAM', newTeam.team_id);
+        // commit('SET_CURRENT_TEAM', newTeam.team_id);
+        // const user = rootState.auth.user;
+
+        return response;
+      } catch (error) {
+        const errorMessage = error.response?.data?.error || 'Failed to create team';
+        commit('SET_ERROR', errorMessage);
+        throw errorMessage;
+      } finally {
+        commit('SET_LOADING', false);
+      }
     }
   },
   getters: {
