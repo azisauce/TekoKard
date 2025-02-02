@@ -34,7 +34,9 @@ exports.register = async (req, res) => {
         const result = await authService.register(fullname, username, email, password);
         res.json(result);
     } catch (error) {
-        console.error('Register error:', error.message);
+        if (error.message.includes('users_email_unique')) {
+            return res.status(400).json({ message: 'This email is already in use' });
+        }
         if (error.message === 'Invalid credentials') {
             return res.status(401).json({ error: error.message });
         }

@@ -21,14 +21,14 @@ export default {
     },
     ADD_TEAM(state, team) {
       state.teams.push(team);
-      if (team) {
-        localStorage.setItem('teams', JSON.stringify(state.teams));
-      } else {
-        localStorage.removeItem('teams');
-      }
     },
     SET_CURRENT_TEAM(state, team) {
       state.currentTeam = team;
+      if (team) {
+        localStorage.setItem('currentTeam', JSON.stringify(state.currentTeam));
+      } else {
+        localStorage.removeItem('currentTeam');
+      }
     },
     SET_LOADING(state, loading) {
       state.loading = loading;
@@ -49,8 +49,8 @@ export default {
         };
         const response = await teamService.createTeam(teamDataWithUser);
         const newTeam = response;
-        commit('ADD_TEAM', newTeam);
-        commit('SET_CURRENT_TEAM', newTeam);
+        commit('ADD_TEAM', newTeam.team_id);
+        commit('SET_CURRENT_TEAM', newTeam.team_id);
         return newTeam;
       } catch (error) {
         const errorMessage = error.response?.data?.error || 'Failed to create team';

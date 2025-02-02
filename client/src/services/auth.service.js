@@ -12,7 +12,7 @@ class AuthService {
             localStorage.setItem('user', JSON.stringify(response.data.user));
             localStorage.setItem('accessToken', response.data.accessToken);
             localStorage.setItem('refreshToken', response.data.refreshToken);
-            localStorage.setItem('teams', JSON.stringify(response.data.team));
+            localStorage.setItem('currentTeam', JSON.stringify(response.data.team));
         }
         return response.data;
     }

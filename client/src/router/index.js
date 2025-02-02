@@ -43,8 +43,8 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   const accessToken = localStorage.getItem('accessToken');
   const refreshToken = localStorage.getItem('refreshToken');
-  const teamsJson = localStorage.getItem('teams');
-  const teams = teamsJson ? JSON.parse(teamsJson) : null;
+  const currentTeamJson = localStorage.getItem('currentTeam');
+  const currentTeam = currentTeamJson ? JSON.parse(currentTeamJson) : null;
   
   // Define public routes
   const publicRoutes = ['login', 'register-form'];
@@ -52,14 +52,14 @@ router.beforeEach(async (to, from, next) => {
   // Allow access to public routes
   if (publicRoutes.includes(to.name) || to.name === 'register-details') {
     // If user is authenticated and has teams, redirect to profile
-    if (accessToken && refreshToken && teams && to.name !== 'profile') {
+    if (accessToken && refreshToken && currentTeam && to.name !== 'profile') {
       return next({ name: 'profile' });
     }
     return next();
   }
   // If we have tokens but no teams, redirect to register-details
   // BUT only if we're not already going there
-  if (accessToken && refreshToken && (!teams) && to.name !== 'register-details') {
+  if (accessToken && refreshToken && (!currentTeam) && to.name !== 'register-details') {
     console.log('Redirecting to register-details');
     return next({ name: 'register-details' });
   }

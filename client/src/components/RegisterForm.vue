@@ -114,7 +114,7 @@ export default {
         
         router.push('/register/details')
       } catch (err) {
-        error.value = err.message || 'Registration failed'
+        error.value = err.response?.data?.message || err.message || 'Registration failed'
       } finally {
         loading.value = false
       }
