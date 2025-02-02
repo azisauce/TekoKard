@@ -57,7 +57,7 @@ class AuthService {
             axios.post(API_URL + 'logout', { refreshToken }).catch(console.error);
         }
         localStorage.removeItem('user');
-        localStorage.removeItem('teams');
+        localStorage.removeItem('currentTeam');
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
     }

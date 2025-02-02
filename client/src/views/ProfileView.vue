@@ -1,7 +1,7 @@
 <template>
   <div class="profile">
     <h1>Hello World</h1>
-    <ProfileDetails />
+    <ProfileDetails v-if="!state.teams.currentTeam" />
     <button @click="handleLogout" class="logout-btn">
       Logout
     </button>
@@ -32,7 +32,8 @@ export default {
     };
 
     return {
-      handleLogout
+      handleLogout,
+      state: store.state
     };
   }
 }

@@ -61,9 +61,10 @@ export default {
         commit('SET_ERROR', null);
         
         const data = await AuthService.login(email, password);
-        
+        console.log('data', data);
         commit('SET_TOKEN', data.token);
         commit('loginSuccess', data.user);
+        commit('teams/SET_CURRENT_TEAM', data.team, { root: true });
         
         // Set default auth header for future requests
         axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
