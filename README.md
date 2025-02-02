@@ -147,13 +147,46 @@ This database schema supports a social media web application with user managemen
 - Defines user permissions
 - Flexible permission management via JSON
 
-### Recommended Implementations
-- Use database-level constraints
-- Create indexes on frequent query fields
-- Implement soft delete mechanisms
-- Use transactions for data integrity
+#### RefreshTokens
+- Stores refresh tokens for users
+- Enables secure token rotation
+- Tracks token usage and expiration
+- Supports multiple device sessions
 
-### Performance Optimization
-- Index foreign key columns
-- Use appropriate data types
-- Consider database partitioning for large datasets
+### Token Authentication Mechanism
+
+The application implements a secure JWT-based authentication system with refresh token rotation:
+
+#### Access Token
+- Short-lived JWT token (15 minutes)
+- Contains user claims and permissions
+- Used for API authentication
+- Sent in Authorization header
+
+#### Refresh Token
+- Long-lived token (7 days)
+- Stored securely in RefreshTokens table
+- One-time use with automatic rotation
+- Used to obtain new access tokens
+
+#### Authentication Flow
+1. User logs in with credentials
+2. Server issues both access and refresh tokens
+3. Client stores tokens securely
+   - Access token in memory
+   - Refresh token in HTTP-only cookie
+4. Access token used for API requests
+5. When access token expires:
+   - Client uses refresh token to get new pair
+   - Old refresh token is invalidated
+   - New refresh token is issued
+6. If refresh token is expired/invalid:
+   - User must log in again
+   - All related refresh tokens are revoked
+
+#### Security Features
+- Refresh token rotation prevents token reuse
+- HTTP-only cookies protect against XSS
+- Database tracking enables token revocation
+- Multiple device sessions supported
+- Automatic cleanup of expired tokens

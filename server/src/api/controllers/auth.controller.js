@@ -23,15 +23,15 @@ exports.login = async (req, res) => {
 
 exports.register = async (req, res) => {
     try {
-        const { username, email, password } = req.body;
+        const { fullname, username, email, password } = req.body;
 
         // Validate request body
-        if (!username || !email || !password) {
-            return res.status(400).json({ error: 'Username, email and password are required' });
+        if (!fullname || !username || !email || !password) {
+            return res.status(400).json({ error: 'Fullname, username, email and password are required' });
         }
 
         // Call auth service for login
-        const result = await authService.register(username, email, password);
+        const result = await authService.register(fullname, username, email, password);
         res.json(result);
     } catch (error) {
         console.error('Register error:', error.message);

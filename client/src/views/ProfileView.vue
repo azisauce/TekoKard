@@ -1,6 +1,7 @@
 <template>
   <div class="profile">
     <h1>Hello World</h1>
+    <ProfileDetails />
     <button @click="handleLogout" class="logout-btn">
       Logout
     </button>
@@ -10,9 +11,13 @@
 <script>
 import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
+import ProfileDetails from '../components/ProfileDetails.vue';
 
 export default {
   name: 'ProfileView',
+  components: {
+    ProfileDetails
+  },
   setup() {
     const store = useStore();
     const router = useRouter();

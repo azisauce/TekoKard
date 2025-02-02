@@ -1,7 +1,18 @@
 <template>
   <form @submit.prevent="handleRegister" class="register-form">
     <h2>Create Account</h2>
-    
+
+    <div class="form-group">
+      <label for="fullname">Full Name</label>
+      <input
+        type="text"
+        id="fullname"
+        v-model="form.fullname"
+        required
+        class="form-control"
+      />
+    </div>
+
     <div class="form-group">
       <label for="username">Username</label>
       <input
@@ -72,6 +83,7 @@ export default {
     const router = useRouter()
     
     const form = ref({
+      fullname: '',
       username: '',
       email: '',
       password: '',
@@ -92,6 +104,7 @@ export default {
         error.value = ''
         
         await store.dispatch('auth/register', {
+          fullname: form.value.fullname,
           username: form.value.username,
           email: form.value.email,
           password: form.value.password
@@ -99,7 +112,7 @@ export default {
 
         console.log('Registration successful')
         
-        router.push('/profile')
+        router.push('/register/details')
       } catch (err) {
         error.value = err.message || 'Registration failed'
       } finally {

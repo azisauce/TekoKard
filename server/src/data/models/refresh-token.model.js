@@ -1,10 +1,12 @@
 const db = require('../database');
 
 class RefreshToken {
-    static async create(tokenData) {
-        return db('refresh_tokens')
+    static async create(tokenData, { transaction } = {}) {
+        const query = db('refresh_tokens')
             .insert(tokenData)
             .returning('*');
+            
+        return transaction ? query.transacting(transaction) : query;
     }
 
     static async findByToken(token) {
@@ -19,16 +21,20 @@ class RefreshToken {
             .first();
     }
 
-    static async delete(token) {
-        return db('refresh_tokens')
+    static async delete(token, { transaction } = {}) {
+        const query = db('refresh_tokens')
             .where({ token })
             .del();
+            
+        return transaction ? query.transacting(transaction) : query;
     }
 
-    static async deleteAllForUser(userId) {
-        return db('refresh_tokens')
+    static async deleteAllForUser(userId, { transaction } = {}) {
+        const query = db('refresh_tokens')
             .where({ user_id: userId })
             .del();
+            
+        return transaction ? query.transacting(transaction) : query;
     }
 }
 

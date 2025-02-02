@@ -1,11 +1,13 @@
 const db = require('../database');
 
 class User {
-    static async create(userData) {
+    static async create(userData, { transaction } = {}) {
         this.validateUserData(userData);
-        return db('users')
+        const query = db('users')
             .insert(userData)
             .returning('*');
+            
+        return transaction ? query.transacting(transaction) : query;
     }
 
     static async findAll() {
@@ -24,18 +26,22 @@ class User {
             .first();
     }
 
-    static async update(id, userData) {
+    static async update(id, userData, { transaction } = {}) {
         this.validateUserData(userData);
-        return db('users')
+        const query = db('users')
             .where({ id: parseInt(id) })
             .update(userData)
             .returning('*');
+            
+        return transaction ? query.transacting(transaction) : query;
     }
 
-    static async delete(id) {
-        return db('users')
+    static async delete(id, { transaction } = {}) {
+        const query = db('users')
             .where({ id: parseInt(id) })
             .del();
+            
+        return transaction ? query.transacting(transaction) : query;
     }
 
     // Helper method to validate user data

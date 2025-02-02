@@ -10,15 +10,19 @@ exports.seed = async function(knex) {
   const teams = await knex('teams').insert([
     {
       name: 'Development Team',
+      tag: 'dev1JuniorGoolg',
     },
     {
       name: 'Design Team',
+      tag: 'UI4Life',
     },
     {
       name: 'Marketing Team',
+      tag: 'ToSkyTeam2',
     },
     {
       name: 'Product Team',
+      tag: 'ProductTeam3',
     }
   ]).returning('*');
 

@@ -78,12 +78,12 @@ export default {
       }
     },
 
-    async register({ commit }, { username, email, password }) {
+    async register({ commit }, { fullname, username, email, password }) {
       try {
         commit('SET_LOADING', true);
         commit('SET_ERROR', null);
         
-        const data = await AuthService.register(username, email, password);
+        const data = await AuthService.register(fullname, username, email, password);
         
         commit('SET_TOKEN', data.token);
         commit('registerSuccess', data.user);

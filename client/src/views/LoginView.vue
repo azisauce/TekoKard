@@ -39,7 +39,7 @@
         </button>
 
         <div class="additional-options">
-          <router-link to="/register" class="register-link">
+          <router-link :to="{ name: 'register-form' }" class="register-link">
             Don't have an account? Sign up
           </router-link>
         </div>
@@ -72,7 +72,7 @@ export default {
       try {
         await store.dispatch('auth/login', form.value)
         console.log('Login successful')
-        router.push('/profile')
+        router.push({ name: 'profile' })
       } catch (error) {
         console.error('Login failed:', error)
       }

@@ -6,7 +6,8 @@ exports.up = function(knex) {
     return knex.schema
         .createTable('teams', table => {
             table.uuid('team_id').primary().defaultTo(knex.raw('uuid_generate_v4()'));
-            table.string('name', 50).unique().notNullable();
+            table.string('name', 50).notNullable();
+            table.string('tag', 50).notNullable().unique();
             table.timestamp('created_at').defaultTo(knex.fn.now());
         })
         .createTable('user_teams', table => {
@@ -23,6 +24,6 @@ exports.up = function(knex) {
  */
 exports.down = function(knex) {
     return knex.schema
-      .dropTable('user_roles')
-      .dropTable('roles');
+      .dropTable('user_teams')
+      .dropTable('teams');
 };

@@ -12,12 +12,14 @@ class AuthService {
             localStorage.setItem('user', JSON.stringify(response.data.user));
             localStorage.setItem('accessToken', response.data.accessToken);
             localStorage.setItem('refreshToken', response.data.refreshToken);
+            localStorage.setItem('teams', JSON.stringify(response.data.team));
         }
         return response.data;
     }
 
-    async register(username, email, password) {
+    async register(fullname, username, email, password) {
         const response = await axios.post(API_URL + 'register', {
+            fullname,
             username,
             email,
             password
@@ -55,6 +57,7 @@ class AuthService {
             axios.post(API_URL + 'logout', { refreshToken }).catch(console.error);
         }
         localStorage.removeItem('user');
+        localStorage.removeItem('teams');
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
     }

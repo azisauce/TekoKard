@@ -2,6 +2,8 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const userRepository = require('../../data/repositories/user.repository');
 const RefreshToken = require('../../data/models/refresh-token.model');
+const Team = require('../../data/models/team.model');
+const db = require('../../data/database');
 
 class AuthService {
     generateAccessToken(user) {
@@ -28,10 +30,11 @@ class AuthService {
 
     async login(email, password) {
         // Find user by email
-        const user = await userRepository.findByEmail(email);        
+        const user = await userRepository.findByEmail(email);      
         if (!user) {
             throw new Error('Invalid credentials');
         }
+        const team = await Team.findTeamByUserId(user.user_id);
         // Verify password
         const isValidPassword = await bcrypt.compare(password, user.password_hash);
         if (!isValidPassword) {
@@ -46,7 +49,7 @@ class AuthService {
         await RefreshToken.create({
             user_id: user.user_id,
             token: refreshToken,
-            expires_at: expiresAt
+            expires_at: expiresAt,
         });
 
         // Return user data and tokens (excluding password)
@@ -54,39 +57,52 @@ class AuthService {
         return {
             user: userWithoutPassword,
             accessToken,
-            refreshToken
+            refreshToken,
+            team
         };
     }
 
-    async register(username, email, password) {
-        // Hash password
-        const hash = await bcrypt.hash(password, 10);
+    async register(fullname, username, email, password) {
+        const transaction = await db.transaction();
+        
+        try {
+            // Hash password
+            const hash = await bcrypt.hash(password, 10);
 
-        // Create user
-        const user = await userRepository.create({
-            username,
-            email,
-            password_hash: hash
-        });
+            // Create user within transaction
+            const [user] = await userRepository.create({
+                full_name: fullname,
+                username,
+                email,
+                password_hash: hash
+            }, { transaction });
 
-        // Generate tokens
-        const accessToken = this.generateAccessToken(user);
-        const { token: refreshToken, expiresAt } = this.generateRefreshToken(user);
+            // Generate tokens
+            const accessToken = this.generateAccessToken(user);
+            const { token: refreshToken, expiresAt } = this.generateRefreshToken(user);
 
-        // Store refresh token
-        await RefreshToken.create({
-            user_id: user.user_id,
-            token: refreshToken,
-            expires_at: expiresAt
-        });
+            // Store refresh token within transaction
+            await RefreshToken.create({
+                user_id: user.user_id,
+                token: refreshToken,
+                expires_at: expiresAt
+            }, { transaction });
 
-        // Return user data and tokens (excluding password)
-        const { password_hash: _, ...userWithoutPassword } = user;
-        return {
-            user: userWithoutPassword,
-            accessToken,
-            refreshToken
-        };
+            // Commit transaction
+            await transaction.commit();
+
+            // Return user data and tokens (excluding password)
+            const { password_hash: _, ...userWithoutPassword } = user;
+            return {
+                user: userWithoutPassword,
+                accessToken,
+                refreshToken
+            };
+        } catch (error) {
+            // Rollback transaction on error
+            await transaction.rollback();
+            throw error;
+        }
     }
 
     async refresh(refreshToken) {
