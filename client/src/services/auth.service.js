@@ -2,7 +2,17 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:3000/api/auth/';
 
+/**
+ * Service for handling authentication-related operations including login, registration,
+ * token management, and user session handling.
+ */
 class AuthService {
+    /**
+     * Authenticates a user with their email and password.
+     * @param {string} email - The user's email address
+     * @param {string} password - The user's password
+     * @returns {Promise<Object>} Response data containing user info and tokens
+     */
     async login(email, password) {
         const response = await axios.post(API_URL + 'login', {
             email,
@@ -17,6 +27,14 @@ class AuthService {
         return response.data;
     }
 
+    /**
+     * Registers a new user in the system.
+     * @param {string} fullname - The user's full name
+     * @param {string} username - The user's chosen username
+     * @param {string} email - The user's email address
+     * @param {string} password - The user's chosen password
+     * @returns {Promise<Object>} Response data containing the new user info and tokens
+     */
     async register(fullname, username, email, password) {
         const response = await axios.post(API_URL + 'register', {
             fullname,
@@ -32,6 +50,11 @@ class AuthService {
         return response.data;
     }
 
+    /**
+     * Refreshes the access token using the stored refresh token.
+     * @returns {Promise<Object|null>} New token data or null if refresh token is missing
+     * @throws {Error} If token refresh fails
+     */
     async refreshToken() {
         const refreshToken = localStorage.getItem('refreshToken');
         if (!refreshToken) {
@@ -50,6 +73,11 @@ class AuthService {
         }
     }
 
+    /**
+     * Logs out the current user by clearing local storage and notifying the server.
+     * Attempts to invalidate the refresh token on the server but continues with
+     * local logout even if server request fails.
+     */
     logout() {
         const refreshToken = localStorage.getItem('refreshToken');
         if (refreshToken) {
@@ -62,14 +90,27 @@ class AuthService {
         localStorage.removeItem('refreshToken');
     }
 
+    /**
+     * Retrieves the currently logged-in user's information from local storage.
+     * @returns {Object|null} The user object or null if no user is logged in
+     */
     getCurrentUser() {
         return JSON.parse(localStorage.getItem('user'));
     }
 
+    /**
+     * Retrieves the current access token from local storage.
+     * @returns {string|null} The access token or null if not present
+     */
     getAccessToken() {
         return localStorage.getItem('accessToken');
     }
 
+    /**
+     * Checks if a JWT token is expired by decoding its payload.
+     * @param {string} token - The JWT token to check
+     * @returns {boolean} True if the token is expired or invalid, false otherwise
+     */
     isTokenExpired(token) {
         if (!token) return true;
         

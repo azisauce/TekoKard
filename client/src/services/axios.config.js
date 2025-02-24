@@ -22,6 +22,11 @@ axios.interceptors.response.use(
     async error => {
         const originalRequest = error.config;
 
+        if (originalRequest.url?.includes('auth/login')) {
+            const customErrorMessage = error.response?.data?.error || 'Login failed';
+            return Promise.reject(new Error(customErrorMessage)); 
+        }
+
         // If the error is not 401 or the request was for refreshing token, reject
         if (error.response?.status !== 401 || originalRequest.url?.includes('auth/refresh')) {
             return Promise.reject(error);
@@ -39,7 +44,6 @@ axios.interceptors.response.use(
         } catch (refreshError) {
             // If refresh token fails, logout user and redirect to login
             store.dispatch('auth/logout');
-            window.location.href = '/login';
             return Promise.reject(refreshError);
         }
     }

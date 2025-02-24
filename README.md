@@ -53,7 +53,7 @@ The frontend follows the Vue.js architecture with these key components:
    - Format data for components
 
 4. **Store** (`/client/src/store`)
-   - Manage application state
+   - Manage application state using Pinia
    - Handle state mutations
    - Provide actions for async operations
 
@@ -61,22 +61,6 @@ The frontend follows the Vue.js architecture with these key components:
    - Define client-side data structures
    - Provide data validation
    - Format data for UI
-
-6. **Controllers** (`/client/src/controllers`)
-   - Handle complex UI logic
-   - Coordinate between components
-   - Manage component interactions
-
-## Data Flow Process
-
-1. User interaction triggers an action in a Vue component
-2. Component calls appropriate controller/service
-3. Frontend service makes API call to backend controller
-4. Backend controller validates request and calls service
-5. Service processes business logic and calls repository
-6. Repository performs database operations
-7. Data flows back through the layers
-8. Frontend receives response and updates UI
 
 ## Project Structure
 
@@ -101,23 +85,6 @@ tekokard/
             ├── models/
             └── repositories/
 ```
-
-## Development Flow
-
-1. Backend development:
-   - Define models in `/server/src/data/models`
-   - Implement repositories in `/server/src/data/repositories`
-   - Create services in `/server/src/business/services`
-   - Set up controllers in `/server/src/api/controllers`
-
-2. Frontend development:
-   - Create/update models in `/client/src/models`
-   - Implement services in `/client/src/services`
-   - Develop components in `/client/src/components`
-   - Set up views in `/client/src/views`
-   - Configure store in `/client/src/store`
-
-
 ## Database Design 
 
 ### Overview
@@ -183,10 +150,3 @@ The application implements a secure JWT-based authentication system with refresh
 6. If refresh token is expired/invalid:
    - User must log in again
    - All related refresh tokens are revoked
-
-#### Security Features
-- Refresh token rotation prevents token reuse
-- HTTP-only cookies protect against XSS
-- Database tracking enables token revocation
-- Multiple device sessions supported
-- Automatic cleanup of expired tokens

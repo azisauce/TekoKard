@@ -3,18 +3,29 @@
 </template>
 
 <script>
+
 export default {
-  name: 'App'
+  name: 'App',
+  computed: {
+    isAuthRoute() {
+      return ['/login', '/register'].includes(this.$route.path)
+    }
+  }
 }
 </script>
 
 <style>
+html {
+  overflow-y: hidden !important;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  background-color: #F6F8FF;
+  height: 100vh;
+  width: 100vw;
 }
 </style>

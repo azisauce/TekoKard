@@ -1,32 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import LoginView from '../views/LoginView.vue'
 import ProfileView from '../views/ProfileView.vue'
+import WelcomeView from '../views/WelcomeView.vue'
 
 const routes = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/welcome'
   },
   {
-    path: '/login',
-    name: 'login',
-    component: LoginView
-  },
-  {
-    path: '/register',
-    component: () => import('../views/RegisterView.vue'),
-    children: [
-      {
-        path: '',
-        name: 'register-form',
-        component: () => import('../components/RegisterForm.vue')
-      },
-      {
-        path: 'details',
-        name: 'register-details',
-        component: () => import('../components/ProfileDetails.vue')
-      }
-    ]
+    path: '/welcome',
+    name: 'welcome',
+    component: WelcomeView
   },
   {
     path: '/profile',
@@ -40,38 +24,46 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach(async (to, from, next) => {
-  const accessToken = localStorage.getItem('accessToken');
-  const refreshToken = localStorage.getItem('refreshToken');
-  const currentTeamJson = localStorage.getItem('currentTeam');
-  const currentTeam = currentTeamJson ? JSON.parse(currentTeamJson) : null;
+// router.beforeEach(async (to, from, next) => {
+//   const accessToken = localStorage.getItem('accessToken');
+//   const refreshToken = localStorage.getItem('refreshToken');
+//   const currentTeamJson = localStorage.getItem('currentTeam');
+//   const currentTeam = currentTeamJson ? JSON.parse(currentTeamJson) : null;
   
-  // Define public routes
-  const publicRoutes = ['login', 'register-form'];
+//   // Define public routes
+//   const publicRoutes = ['login', 'register-form','home'];
 
-  // Allow access to public routes
-  if (publicRoutes.includes(to.name) || to.name === 'register-details') {
-    // If user is authenticated and has teams, redirect to profile
-    if (accessToken && refreshToken && currentTeam && to.name !== 'profile') {
-      return next({ name: 'profile' });
-    }
-    return next();
-  }
-  // If we have tokens but no teams, redirect to register-details
-  // BUT only if we're not already going there
-  if (accessToken && refreshToken && (!currentTeam) && to.name !== 'register-details') {
-    console.log('Redirecting to register-details');
-    return next({ name: 'register-details' });
-  }
+//   // Allow access to public routes
+//   if (publicRoutes.includes(to.name) || to.name === 'register-details') {
+//     // If user is authenticated and has teams, redirect to profile
+//     if (accessToken && refreshToken && currentTeam && to.name !== 'profile') {
+//       console.log('Redirecting to profile');
+//       return next({ name: 'profile' });
+//     }
+//     // If we have tokens but no teams, redirect to register-details
+//     // BUT only if we're not already going there
+//     if (accessToken && refreshToken && (!currentTeam) && to.name !== 'register-details') {
+//       console.log('Redirecting to register-details');
+//       return next({ name: 'register-details' });
+//     }
+//     return next();
+//   }
+
+//   // If we have tokens but no teams, redirect to register-details
+//   // BUT only if we're not already going there
+//   if (accessToken && refreshToken && (!currentTeam) && to.name !== 'register-details') {
+//     console.log('Redirecting to register-details');
+//     return next({ name: 'register-details' });
+//   }
 
   
-  // Protected route logic
-  if (!accessToken || !refreshToken) {
-    console.log('No tokens found, redirecting to login');
-    return next({ name: 'login' });
-  }
+//   // Protected route logic
+//   if (!accessToken || !refreshToken) {
+//     console.log('No tokens found, redirecting to login');
+//     return next({ name: 'login' });
+//   }
 
-  return next();
-})
+//   return next();
+// })
 
 export default router
