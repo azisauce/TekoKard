@@ -76,3 +76,54 @@ exports.logout = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+// exports.refresh = (req, res) => {
+//     try {
+//         // Get refresh token from HTTP-only cookie
+//         const refreshToken = req.cookies.refreshToken;
+//         if (!refreshToken) {
+//             return res.status(401).json({ message: 'Unauthorized: No refresh token' });
+//         }
+
+//         // Verify the refresh token
+//         jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET || 'your-refresh-secret-key', async (err, decoded) => {
+//             if (err) return res.status(403).json({ message: 'Forbidden: Invalid refresh token' });
+
+//             const userId = decoded.userId;
+
+//             // Check if the refresh token exists in the database
+//             const storedToken = await RefreshToken.findOne({ where: { token: refreshToken, user_id: userId } });
+//             if (!storedToken) {
+//                 return res.status(403).json({ message: 'Forbidden: Refresh token not found' });
+//             }
+
+//             // Generate new tokens
+//             const newAccessToken = generateAccessToken(userId);
+//             const { token: newRefreshToken, expiresAt } = generateRefreshToken(userId);
+
+//             // Delete the old refresh token from the database
+//             await RefreshToken.destroy({ where: { token: refreshToken } });
+
+//             // Store the new refresh token in the database
+//             await RefreshToken.create({
+//                 user_id: userId,
+//                 token: newRefreshToken,
+//                 expires_at: expiresAt,
+//             });
+
+//             // Set the new refresh token in an HTTP-only cookie
+//             res.cookie('refreshToken', newRefreshToken, {
+//                 httpOnly: true,
+//                 secure: true,    // Ensure HTTPS in production
+//                 sameSite: 'Strict',
+//                 path: '/refresh',
+//                 expires: expiresAt,
+//             });
+
+//             // Send new access token in response
+//             res.json({ accessToken: newAccessToken });
+//         });
+//     } catch (error) {
+//         res.status(500).json({ message: 'Internal Server Error' });
+//     }
+// }

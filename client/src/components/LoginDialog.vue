@@ -61,6 +61,7 @@
 <script>
 import { computed, ref } from 'vue'
 import { useAuthStore } from '@/store/authStore';
+import { useRouter } from 'vue-router';
 import {
     VDialog,
     VCard,
@@ -100,6 +101,7 @@ export default {
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
+    const router = useRouter();
     const authStore = useAuthStore();
     const dialogModel = computed({
       get: () => props.modelValue?.open,
@@ -142,7 +144,7 @@ export default {
         // await store.dispatch('auth/login', form.value);
         await authStore.login(form.value);
         console.log('Login successful');  
-        // router.push({ name: 'profile' })
+        router.push({ name: 'feed' })
       } catch (err) {
         console.log('Login failed');  
         console.log('err.message: ',err.message);

@@ -52,6 +52,15 @@ class AuthService {
             expires_at: expiresAt,
         });
 
+        // Set refresh token as an HTTP-only cookie
+        // res.cookie('refreshToken', refreshToken, {
+        //     httpOnly: true,      // Prevents JavaScript access
+        //     secure: true,        // Use HTTPS in production
+        //     sameSite: 'Strict',  // Prevents CSRF attacks
+        //     path: '/refresh',    // Only send this cookie on refresh requests
+        //     expires: expiresAt,  // Set expiration
+        // });
+
         // Return user data and tokens (excluding password)
         const { password_hash: _, ...userWithoutPassword } = user;
         return {
